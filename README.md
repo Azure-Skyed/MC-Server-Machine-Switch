@@ -30,8 +30,9 @@ I'm going to assume you already have java, the Minecraft server, and optionally 
 Set up your directories.
 Edit these to your liking, though these are my personal ones.
 
-MAIN MACHINE: /home/azure/minecraftservers/26_2_FABRIC
-SECONDARY MACHINE: /home/homeserver/minecraftservers/26_2_FABRIC
+MAIN MACHINE: `/home/azure/minecraftservers/26_2_FABRIC`
+
+SECONDARY MACHINE: `/home/homeserver/minecraftservers/26_2_FABRIC`
 
 Move/make your Minecraft server as usual to the main machine's folder.
 (I recommend changing your server's .jar to `server.jar`, to make it more organized.)
