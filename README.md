@@ -167,7 +167,7 @@ WantedBy=multi-user.target
 Please read the comments in that to see what you need to replace.
 
 
-
+<details></details>
 <summary>
   
 ## OPTIONAL: Set up Playit
@@ -289,3 +289,17 @@ Scroll to the bottom, and add
 MAIN_USER ALL=(root) NOPASSWD: /usr/bin/systemctl start minecraft, /usr/bin/systemctl stop minecraft
 ```
 
+<details>
+<summary>
+#### Playit
+</summary>
+
+If youre using playit, make sure you add `, /usr/bin/systemctl start playit, /usr/bin/systemctl stop playit`.
+
+final line will be:
+
+```bash
+MAIN_USER ALL=(root) NOPASSWD: /usr/bin/systemctl start minecraft, /usr/bin/systemctl stop minecraft, /usr/bin/systemctl start playit, /usr/bin/systemctl stop playit
+```
+  
+</details>
