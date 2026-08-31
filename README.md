@@ -36,6 +36,7 @@ SECONDARY MACHINE: `/home/homeserver/minecraftservers/26_2_FABRIC`
 
 Move/make your Minecraft server as usual to the main machine's folder.
 (I recommend changing your server's .jar to `server.jar`, to make it more organized.)
+It's always a good idea to make a backup of your server.
 
 
 
@@ -210,7 +211,7 @@ Paste this in there:
 
 ```bash
 [Unit]
-Description=Playit Tunnel
+Description=Playit TunnelAdded optional Playit setup instructions in details.
 After=network-online.target
 Wants=network-online.target
 
@@ -286,8 +287,9 @@ sudo EDITOR=nano visudo
 Scroll to the bottom, and add
 
 ```bash
-MAIN_USER ALL=(root) NOPASSWD: /usr/bin/systemctl start minecraft, /usr/bin/systemctl stop minecraft
+MAIN_OR_SECONDARY_USER ALL=(root) NOPASSWD: /usr/bin/systemctl start minecraft, /usr/bin/systemctl stop minecraft
 ```
+Do this on both machines.
 
 <details>
 <summary>
@@ -301,7 +303,108 @@ If youre using playit, make sure you add `, /usr/bin/systemctl start playit, /us
 final line will be:
 
 ```bash
-MAIN_USER ALL=(root) NOPASSWD: /usr/bin/systemctl start minecraft, /usr/bin/systemctl stop minecraft, /usr/bin/systemctl start playit, /usr/bin/systemctl stop playit
+MAIN_OR_SECONDARY_USER ALL=(root) NOPASSWD: /usr/bin/systemctl start minecraft, /usr/bin/systemctl stop minecraft, /usr/bin/systemctl start playit, /usr/bin/systemctl stop playit
 ```
+Do this on both machines.
   
 </details>
+
+### Step 5
+
+Install `mc-main`
+
+This will be the command to run in your terminal to make the server run on your main machine.
+
+Make this only on the main machine.
+
+```bash
+sudo nano /usr/local/bin/mc-home
+```
+
+<details>
+<summary>
+  
+#### Playit
+
+</summary>
+
+```bash
+#!/bin/bash
+
+set -e
+
+SECONDARY="SECONDARY_USER@SECONDARY_IP" # Secondary server's username and ip
+SECONDARY_SERVER="/home/SECONDARY_USER/minecraftservers/SERVER/" # Secondary server's directory
+MAIN_SERVER="/home/MAIN_USER/minecraftservers/SERVER/" # Main server's directory
+# you dont need to change anything else
+
+echo "==> Stopping Minecraft on secondary..."
+ssh "$SECONDARY" "sudo -n systemctl stop minecraft"
+
+echo "==> Waiting for Minecraft to stop..."
+ssh "$SECONDARY" "sudo -n systemctl is-active minecraft >/dev/null 2>&1 && exit 1 || true"
+
+echo "==> Stopping Playit on secondary..."
+ssh "$SECONDARY" "sudo -n systemctl stop playit"
+
+echo "==> Syncing secondary → main..."
+rsync -a --delete --info=progress2 \
+    "$SECONDARY:$SECONDARY_SERVER" \
+    "$MAIN_SERVER"
+
+echo "==> Starting Minecraft on main..."
+sudo systemctl start minecraft
+
+echo "==> Starting Playit on main..."
+sudo systemctl start playit
+echo
+echo "================================"
+echo " Minecraft is now running at MAIN"
+echo "================================"
+```
+</details>
+
+<details>
+<summary>
+  
+#### Minecraft only
+
+</summary>
+
+```bash
+#!/bin/bash
+
+set -e
+
+SECONDARY="SECONDARY_USER@SECONDARY_IP" # Secondary server's username and ip
+SECONDARY_SERVER="/home/SECONDARY_USER/minecraftservers/SERVER/" # Secondary server's directory
+MAIN_SERVER="/home/MAIN_USER/minecraftservers/SERVER/" # Main server's directory
+# you dont need to change anything else
+
+echo "==> Stopping Minecraft on secondary..."
+ssh "$SECONDARY" "sudo -n systemctl stop minecraft"
+
+echo "==> Waiting for Minecraft to stop..."
+ssh "$SECONDARY" "sudo -n systemctl is-active minecraft >/dev/null 2>&1 && exit 1 || true"
+
+echo "==> Syncing secondary → main..."
+rsync -a --delete --info=progress2 \
+    "$SECONDARY:$SECONDARY_SERVER" \
+    "$MAIN_SERVER"
+
+echo "==> Starting Minecraft on main..."
+sudo systemctl start minecraft
+
+echo
+echo "================================"
+echo " Minecraft is now running at MAIN"
+echo "================================"
+```
+
+</details>
+
+Lastly, make it executable.
+
+```bash
+sudo chmod +x /usr/local/bin/mc-home
+```
