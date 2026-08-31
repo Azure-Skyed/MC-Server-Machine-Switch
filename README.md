@@ -169,7 +169,9 @@ Please read the comments in that to see what you need to replace.
 
 <details>
 <summary>
-  ## OPTIONAL: Set up Playit
+  
+## OPTIONAL: Set up Playit
+
 </summary>
 
 This is to use playit.gg
