@@ -78,7 +78,7 @@ ssh SECONDARY_USERNAME@SECONDARY_IP
 You shouldn't be asked for a password now.
 `exit` once you know it works
 
-#### Step 2.1
+#### Secondary
 
 Now we have to do that the other way around on the secondary machine.
 
@@ -135,7 +135,7 @@ WantedBy=multi-user.target
 ```
 Please read the comments in that to see what you need to replace
 
-#### Step 3.1
+#### Secondary
 
 Now do the same on the secondary machine
 
@@ -168,14 +168,13 @@ Please read the comments in that to see what you need to replace.
 
 
 
-<details>
 <summary>
   
 ## OPTIONAL: Set up Playit
 
 </summary>
 
-This is to use playit.gg
+This is to use playit.gg.
 If you aren't using it, you can safely ignore this step, and any other steps that reference playit.
 
 
@@ -233,7 +232,7 @@ Reload systemd
 sudo systemctl daemon-reload
 ```
 
-#### Step 2.1
+#### Secondary
 
 Now do the same on the secondary machine
 
@@ -269,6 +268,24 @@ Reload systemd
 sudo systemctl daemon-reload
 ```
 
-Playit will be sprinkled in later, just remember to use the playit dropdown, not the normal one.
+Playit will be sprinkled in later, just remember to use the playit dropdown.
 
 </details>
+
+
+### Step 4
+
+Allow the switches to control systemd.
+
+On the main machine, run
+
+```bash
+sudo EDITOR=nano visudo
+```
+
+Scroll to the bottom, and add
+
+```bash
+MAIN_USER ALL=(root) NOPASSWD: /usr/bin/systemctl start minecraft, /usr/bin/systemctl stop minecraft
+```
+
