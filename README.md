@@ -17,9 +17,9 @@ A secondary machine, where you'd like the server to transfer when the main one i
 
 and install these packages on both machines.
 
-'''bash
+```bash
 sudo pacman -S openssh rsync systemd --needed 
-'''
+```
 
 
 I'm going to assume you already have java, the Minecraft server, and optionally playit.
@@ -42,9 +42,9 @@ SSH has to work on both machines in order to sync the world over.
 First, we need to know both machine's IPs.
 run this command on both.
 
-'''bash
+```bash
 ip addr 
-'''
+```
 
 Find an ip that looks similar to this: 192.168.1.123
 
