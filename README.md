@@ -180,4 +180,94 @@ If you aren't using it, you can safely ignore this step, and any other steps tha
 
 ### Step 1
 
+Sync the config.
+
+Run playit and set it up on your main machine.
+Once you did that, copy the config over to the secondary machine. It should be in
+`~/.config/playit_gg/playit.toml`
+
+Run this to copy it over.
+
+```bash
+scp /home/MAIN_USER/.config/playit_gg/playit.toml SECONDARY_USER@SECONDARY_IP:/home/SECONDARY_USER/.config/playit_gg/playit.toml
+```
+Replace `MAIN_USER`, `SECONDARY_USER`, and `SECONDARY_IP`.
+
+Also, download and run playit on the secondary machine and ensure everything works as it is supposed to.
+Probably not a good idea to run playit on both machines at the same time.
+
+### Step 2
+
+Create the Playit systemd service
+
+On the main machine, run:
+
+```bash
+sudo nano /etc/systemd/system/playit.service
+```
+
+Paste this in there:
+
+```bash
+[Unit]
+Description=Playit Tunnel
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=MAIN_USER # replace this with your username
+WorkingDirectory=/home/MAIN_USER # replace this with your playit directory
+ExecStart=/home/MAIN_USER/playit-linux-amd64 # replace this with your username
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+```
+Please read the comments in that to see what you need to replace
+
+Reload systemd
+```bash
+sudo systemctl daemon-reload
+```
+
+#### Step 2.1
+
+Now do the same on the secondary machine
+
+On the secondary machine, run:
+
+```bash
+sudo nano /etc/systemd/system/playit.service
+```
+
+Paste this in there:
+
+```bash
+[Unit]
+Description=Playit Tunnel
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=SECONDARY_USER # replace this with your username
+WorkingDirectory=/home/SECONDARY_USER # replace this with your playit directory
+ExecStart=/home/SECONDARY_USER/playit-linux-amd64 # replace this with your username
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+```
+Please read the comments in that to see what you need to replace
+
+Reload systemd
+```bash
+sudo systemctl daemon-reload
+```
+
+Playit will be sprinkled in later, just remember to use the playit dropdown, not the normal one.
+
 </details>
