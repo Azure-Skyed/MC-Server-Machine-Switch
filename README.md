@@ -167,7 +167,7 @@ WantedBy=multi-user.target
 Please read the comments in that to see what you need to replace.
 
 
-<details></details>
+<details>
 <summary>
   
 ## OPTIONAL: Set up Playit
