@@ -291,7 +291,9 @@ MAIN_USER ALL=(root) NOPASSWD: /usr/bin/systemctl start minecraft, /usr/bin/syst
 
 <details>
 <summary>
+  
 #### Playit
+
 </summary>
 
 If youre using playit, make sure you add `, /usr/bin/systemctl start playit, /usr/bin/systemctl stop playit`.
