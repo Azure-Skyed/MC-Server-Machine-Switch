@@ -168,7 +168,9 @@ Please read the comments in that to see what you need to replace.
 
 
 <details>
-## <summary>OPTIONAL: Set up Playit</summary>
+<summary>
+  ## OPTIONAL: Set up Playit
+</summary>
 
 This is to use playit.gg
 If you aren't using it, you can safely ignore this step, and any other steps that reference playit.
