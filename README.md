@@ -45,6 +45,11 @@ It's always a good idea to make a backup of your server.
 Configure SSH.
 SSH has to work on both machines in order to sync the world over.
 
+Start it on both machines.
+```bash
+sudo systemctl enable --now sshd
+```
+
 First, we need to know both machine's local IP.
 Run this command on both machines.
 
@@ -103,7 +108,6 @@ ssh MAIN_USERNAME@MAIN_IP
 ```
 You shouldn't be asked for a password again.
 `exit` once you know it works
-
 
 ### Step 3
 
@@ -318,7 +322,7 @@ This will be the command to run in your terminal to make the server run on your 
 Make this only on the main machine.
 
 ```bash
-sudo nano /usr/local/bin/mc-home
+sudo nano /usr/local/bin/mc-main
 ```
 
 <details>
@@ -403,8 +407,142 @@ echo "================================"
 
 </details>
 
+Look for the comments near the top of the script and edit it.
+
+
 Lastly, make it executable.
 
 ```bash
-sudo chmod +x /usr/local/bin/mc-home
+sudo chmod +x /usr/local/bin/mc-main
 ```
+
+### Step 6
+
+Now we do a similar thing for the other way around. this will be `mc-secondary`.
+
+Make this only on the main machine.
+
+```bash
+sudo nano /usr/local/bin/mc-secondary
+```
+
+<details>
+<summary>
+  
+#### Playit
+
+</summary>
+
+```bash
+#!/bin/bash
+
+set -e
+
+SECONDARY="SECONDARY_USER@SECONDARY_IP" # Secondary server's username and ip
+MAIN_SERVER="/home/MAIN_USER/minecraftservers/SERVER/" # Main server directory
+SECONDARY_SERVER="/home/SECONDARY_USER/minecraftservers/SERVER/" # Secondary server's directory
+# nothing else needs to be edited
+
+echo "==> Stopping Minecraft on main..."
+sudo systemctl stop minecraft
+
+echo "==> Stopping Playit on main..."
+sudo systemctl stop playit
+
+echo "==> Syncing main → secondary..."
+rsync -a --delete --info=progress2 \
+    "$MAIN_SERVER" \
+    "$SECONDARY:$SECONDARY_SERVER"
+
+echo "==> Starting Minecraft on secondary..."
+ssh "$SECONDARY" "sudo -n systemctl start minecraft"
+
+echo "==> Starting Playit on secondary..."
+ssh "$SECONDARY" "sudo -n systemctl start playit"
+
+echo
+echo "=================================="
+echo " Minecraft is now running at SECONDARY"
+echo "=================================="
+```
+
+Edit the first few lines with the comments next to them.
+
+</details>
+
+<details>
+<summary>
+  
+#### Minecraft only
+
+</summary>
+
+```bash
+#!/bin/bash
+
+set -e
+
+SECONDARY="SECONDARY_USER@SECONDARY_IP" # Secondary server's username and ip
+MAIN_SERVER="/home/MAIN_USER/minecraftservers/SERVER/" # Main server directory
+SECONDARY_SERVER="/home/SECONDARY_USER/minecraftservers/SERVER/" # Secondary server's directory
+# nothing else needs to be edited
+
+echo "==> Stopping Minecraft on main..."
+sudo systemctl stop minecraft
+
+echo "==> Syncing main → secondary..."
+rsync -a --delete --info=progress2 \
+    "$MAIN_SERVER" \
+    "$SECONDARY:$SECONDARY_SERVER"
+
+echo "==> Starting Minecraft on secondary..."
+ssh "$SECONDARY" "sudo -n systemctl start minecraft"
+
+echo
+echo "=================================="
+echo " Minecraft is now running at SECONDARY"
+echo "=================================="
+```
+
+</details>
+
+Remember to make it executable.
+
+```bash
+sudo chmod +x /usr/local/bin/mc-secondary
+```
+
+### Step 7
+
+Finally, let's start the server.
+
+From your main machine, run
+
+```bash
+sudo systemctl start minecraft
+```
+
+<details>
+<summary>
+  
+#### Playit
+
+</summary>
+If you are using playit, also run
+
+```bash
+sudo systemctl start playit
+```
+
+</details>
+
+Open minecraft, and make sure that server is working.
+
+Once you're ready to swap it over, open a terminal and run 
+```bash
+mc-secondary
+```
+It should sync over to the secondary machine, and run the server there.
+The first swap will take significantly longer than any other sync.
+
+**Never run both Minecraft servers at the same time.**
