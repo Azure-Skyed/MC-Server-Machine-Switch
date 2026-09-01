@@ -1,22 +1,40 @@
 # MC-Server-Machine-Switch
 A fast and simple method of switching the host machine of a Minecraft Server for Arch.
 
+### Watch a demo!
 https://www.youtube.com/watch?v=Xnc5Dc_Kl3U
 
-This guide will show you how to easily switch the machine of where your Minecraft server is hosted, while keeping the world's data intact.
 Optionally, this can swap over Playit aswell.
 
+## INSTALL 
 
-## GUIDE
+<details>
+<summary>
 
-### Step 0
+### AUTOMATED SCRIPT
+
+</summary>
+
+
+
+</details>
+
+<details>
+<summary>
+
+### MANUAL GUIDE
+
+</summary>
+
+#### Step 0
 
 Ensure you have:
 
-A main machine, where you'd like the server to be hosted most often
+A main machine, where you'd like the server to be hosted most often.
+
 A secondary machine, where you'd like the server to transfer when the main one is off.
 
-and install these packages on both machines.
+Install these packages on both machines.
 
 ```bash
 sudo pacman -S openssh rsync systemd --needed 
@@ -24,9 +42,7 @@ sudo pacman -S openssh rsync systemd --needed
 
 I'm going to assume you already have java, the Minecraft server, and optionally playit.
 
-
-
-### Step 1
+#### Step 1
 
 Set up your directories.
 Edit these to your liking, though these are my personal ones.
@@ -41,7 +57,7 @@ It's always a good idea to make a backup of your server.
 
 
 
-### Step 2
+#### Step 2
 
 Configure SSH.
 SSH has to work on both machines in order to sync the world over.
@@ -110,7 +126,7 @@ ssh MAIN_USERNAME@MAIN_IP
 You shouldn't be asked for a password again.
 `exit` once you know it works
 
-### Step 3
+#### Step 3
 
 Create the Minecraft systemd service
 
@@ -141,7 +157,7 @@ WantedBy=multi-user.target
 ```
 Please read the comments in that to see what you need to replace
 
-#### Secondary
+##### Secondary
 
 Now do the same on the secondary machine
 
@@ -176,7 +192,7 @@ Please read the comments in that to see what you need to replace.
 <details>
 <summary>
   
-## OPTIONAL: Set up Playit
+### OPTIONAL: Set up Playit
 
 </summary>
 
@@ -184,7 +200,7 @@ This is to use playit.gg.
 If you aren't using it, you can safely ignore this step, and any other steps that reference playit.
 
 
-### Step 1
+#### Step 1
 
 Sync the config.
 
@@ -202,7 +218,7 @@ Replace `MAIN_USER`, `SECONDARY_USER`, and `SECONDARY_IP`.
 Also, download and run playit on the secondary machine and ensure everything works as it is supposed to.
 Probably not a good idea to run playit on both machines at the same time.
 
-### Step 2
+#### Step 2
 
 Create the Playit systemd service
 
@@ -238,7 +254,7 @@ Reload systemd
 sudo systemctl daemon-reload
 ```
 
-#### Secondary
+##### Secondary
 
 Now do the same on the secondary machine
 
@@ -279,7 +295,7 @@ Playit will be sprinkled in later, just remember to use the playit dropdown.
 </details>
 
 
-### Step 4
+#### Step 4
 
 Allow the switches to control systemd.
 
@@ -299,7 +315,7 @@ Do this on both machines.
 <details>
 <summary>
   
-#### Playit
+##### Playit
 
 </summary>
 
@@ -314,7 +330,7 @@ Do this on both machines.
   
 </details>
 
-### Step 5
+#### Step 5
 
 Install `mc-main`
 
@@ -329,7 +345,7 @@ sudo nano /usr/local/bin/mc-main
 <details>
 <summary>
   
-#### Playit
+##### Playit
 
 </summary>
 
@@ -372,7 +388,7 @@ echo "================================"
 <details>
 <summary>
   
-#### Minecraft only
+##### Minecraft only
 
 </summary>
 
@@ -417,7 +433,7 @@ Lastly, make it executable.
 sudo chmod +x /usr/local/bin/mc-main
 ```
 
-### Step 6
+#### Step 6
 
 Now we do a similar thing for the other way around. this will be `mc-secondary`.
 
@@ -430,7 +446,7 @@ sudo nano /usr/local/bin/mc-secondary
 <details>
 <summary>
   
-#### Playit
+##### Playit
 
 </summary>
 
@@ -474,7 +490,7 @@ Edit the first few lines with the comments next to them.
 <details>
 <summary>
   
-#### Minecraft only
+##### Minecraft only
 
 </summary>
 
@@ -513,7 +529,7 @@ Remember to make it executable.
 sudo chmod +x /usr/local/bin/mc-secondary
 ```
 
-### Step 7
+#### Step 7
 
 Finally, let's start the server.
 
@@ -526,7 +542,7 @@ sudo systemctl start minecraft
 <details>
 <summary>
   
-#### Playit
+##### Playit
 
 </summary>
 If you are using playit, also run
@@ -547,3 +563,5 @@ It should sync over to the secondary machine, and run the server there.
 The first swap will take significantly longer than any other sync.
 
 **Never run both Minecraft servers at the same time.**
+
+</details>
