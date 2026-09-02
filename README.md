@@ -8,8 +8,6 @@ Optionally, this can swap over Playit aswell.
 
 ### MANUAL GUIDE
 
-</summary>
-
 #### Step 0
 
 Ensure you have:
@@ -547,5 +545,3 @@ It should sync over to the secondary machine, and run the server there.
 The first swap will take significantly longer than any other sync.
 
 **Never run both Minecraft servers at the same time.**
-
-</details>
