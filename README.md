@@ -6,22 +6,6 @@ https://www.youtube.com/watch?v=Xnc5Dc_Kl3U
 
 Optionally, this can swap over Playit aswell.
 
-## INSTALL 
-
-<details>
-<summary>
-
-### AUTOMATED SCRIPT
-
-</summary>
-
-Coming soon
-
-</details>
-
-<details>
-<summary>
-
 ### MANUAL GUIDE
 
 </summary>
